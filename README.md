@@ -2,6 +2,15 @@
 
 A microservice testing repository built with [Go Fiber](https://gofiber.io/) framework, PostgreSQL database, and Docker Compose for easy deployment.
 
+This repository is meant to be used as a strating point for testing out common web development tasks using go-fiber. The main branch is used as a satring ground for other tests like: 
+
+- Setup API documentation
+- Setup an Admin page for managing the service data
+- Creating and applying migrations with GORM and trying out different database patterns 
+- Setting up a local API cache 
+- Implementing JWT validation middleware
+- And whatever you like ...
+
 ## Features
 
 - **Go Fiber Framework** - Fast, Express-inspired web framework
@@ -122,7 +131,32 @@ make fmt           # Format code
 make vet           # Run go vet
 ```
 
-## API Endpoints
+## Database Models
+
+The base application hosts data from two very simple models.
+
+### User
+```go
+type User struct {
+    ID    uint   `json:"id"`
+    Name  string `json:"name"`
+    Email string `json:"email"`
+}
+```
+
+### Product
+```go
+type Product struct {
+    ID          uint    `json:"id"`
+    Name        string  `json:"name"`
+    Description string  `json:"description"`
+    Price       float64 `json:"price"`
+}
+```
+
+## API Endpoints (Base Example)
+
+The main branch has a very simple CRUD enpoints for a Users/Products sample application.
 
 ### Health Check
 - `GET /health` - Check service status
@@ -141,7 +175,7 @@ make vet           # Run go vet
 - `PUT /api/v1/products/:id` - Update product
 - `DELETE /api/v1/products/:id` - Delete product
 
-## Example Requests
+## Example Requests (Base Example)
 
 ### Create a User
 ```bash
@@ -184,26 +218,7 @@ The application uses a `.env` file for configuration. Copy `.env.example` to `.e
 
 **Note**: The `.env` file is not tracked in git. Always use `.env.example` as a template.
 
-## Database Models
 
-### User
-```go
-type User struct {
-    ID    uint   `json:"id"`
-    Name  string `json:"name"`
-    Email string `json:"email"`
-}
-```
-
-### Product
-```go
-type Product struct {
-    ID          uint    `json:"id"`
-    Name        string  `json:"name"`
-    Description string  `json:"description"`
-    Price       float64 `json:"price"`
-}
-```
 
 ## Docker Services
 
