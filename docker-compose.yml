@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: fiber-postgres
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - fiber-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fiber-app
+    env_file:
+      - .env
+    ports:
+      - "${PORT}:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - fiber-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  fiber-network:
+    driver: bridge
